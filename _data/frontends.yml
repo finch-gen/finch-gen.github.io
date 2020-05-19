@@ -1,0 +1,13 @@
+- name: finch-cc
+  url: https://github.com/finch-gen/finch-cc
+  description: finch frontend for C++
+  color: "#f34b7d"
+  language: C++
+  type: Official
+
+- name: finch-dart
+  url: https://github.com/finch-gen/finch-dart
+  description: finch frontend for Dart
+  color: "#00B4AB"
+  language: Dart
+  type: Official
