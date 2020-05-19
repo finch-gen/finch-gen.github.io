@@ -1,0 +1,28 @@
+---
+layout: default
+---
+{% include header.html section="docs" %}
+<div class="flex flex-grow">
+  <div class="flex flex-col w-1/5 bg-gray-300 py-4 pl-12">
+    {% assign docs_list = site.docs | group_by: 'category' | sort: 'category_index' %}
+    {% for cat in docs_list %}
+      <p class="text-xl font-fira">{{ cat.name | capitalize }}</p>
+      <ul class="pl-4">
+        {% assign items = cat.items | sort: 'index' %}
+        {% for item in items %}
+          {% if page.url == item.url %}
+            <li class="text-blue-600"><a href="{{item.url}}">{{item.title}}</a></li>
+          {% else %}
+            <li><a href="{{item.url}}">{{item.title}}</a></li>
+          {% endif %}
+        {% endfor %}
+      </ul>
+    {% endfor %}
+  </div>
+
+  <div class="px-12 py-6">
+    <p class="font-slab text-4xl">{{ page.title }}</p>
+    {{ content }}
+  </div>
+</div>
+

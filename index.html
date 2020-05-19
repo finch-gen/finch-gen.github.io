@@ -1,0 +1,173 @@
+---
+layout: default
+title: finch-gen
+highlight_style: "dark"
+---
+
+<!-- <div class="bg-rust px-12 py-6">
+  <p class="font-slab text-5xl">finch-gen</p>
+  <p class="font-mono text-lg">A tool for creating language agnostic APIs in Rust.</p>
+</div> -->
+
+{% include header.html %}
+
+<div class="grid grid-cols-3 bg-atomDark text-white">
+  <div class="flex flex-col mx-4 my-2">
+    <div class="flex items-center my-2">
+      <img class="h-24 mr-4 object-contain" src="https://rustacean.net/assets/rustacean-orig-noshadow.svg" alt="ferris">
+      <div class="flex flex-col">
+        <p class="font-fira text-2xl">Write code in</p>
+        <p class="font-slab text-5xl -my-4 text-rust">Rust</p>
+      </div>
+    </div>
+    <pre class="flex-grow flex border-t border-gray-700">
+<code class="language-rust h-full w-full">use finch_macro::*;
+
+#[finch_bindgen]
+pub struct Foo {
+  pub x: i32,
+  y: i32,
+}
+
+#[finch_bindgen]
+impl Foo {
+  pub fn new(y: i32) -> Self {
+    Self {
+      x: 1,
+      y,
+    }
+  }
+
+  pub fn print_y(&self) {
+    println!("The value of y is: {}", self.y);
+  }
+
+  pub fn print_int(value: i32) {
+    println!("The integer is: {}", value);
+  }
+}</code>
+      </pre>
+    </div>
+
+    <div class="flex flex-col mx-4 my-2">
+      <div class="flex items-center my-2">
+        <img class="h-24 py-2 mr-4 object-contain" src="https://upload.wikimedia.org/wikipedia/commons/1/18/ISO_C%2B%2B_Logo.svg" alt="ferris">
+        <div class="flex flex-col">
+          <p class="font-fira text-2xl">and use it in</p>
+          <p class="font-slab text-5xl -my-4 text-cc">C++</p>
+        </div>
+      </div>
+      <pre class="flex-grow flex border-t border-gray-700">
+<code class="language-cpp h-full w-full">#include &lt;iostream&gt;
+#include "my_library.h"
+
+using namespace my_library;
+
+void main() {
+  // We need to initialize the library before we can use it.
+  // This sets up the panic hook.
+  initialize();
+
+  Foo f(12);
+
+  std::cout &lt;&lt; f.get_x() &lt;&lt; std::endl; // 1
+  f.set_x(24);
+  std::cout &lt;&lt; f.get_x() &lt;&lt; std::endl; // 24
+
+  f.print_y(); // The value of y is: 12
+
+  Foo::print_int(36); // The integer is: 36
+}</code>
+      </pre>
+    </div>
+
+    <div class="flex flex-col mx-4 my-2">
+      <div class="flex items-center my-2">
+        <img class="h-24 py-2 mr-4 object-contain" src="/assets/img/logo_dart_1080px_clr.png" alt="ferris">
+        <div class="flex flex-col">
+          <p class="font-fira text-2xl">or</p>
+          <p class="font-slab text-5xl -my-4 text-dart">Dart</p>
+        </div>
+      </div>
+      <pre class="flex-grow flex border-t border-gray-700">
+<code class="language-dart h-full w-full">import 'dart:ffi';
+import 'my_library.dart';
+
+int main() {
+  final dylib = DynamicLibrary.open('my_library.so');
+
+  // We need to initialize the library before we can use it.
+  // This function takes in a ffi.DynamicLibrary that contains the
+  // functions and loads the internal function pointers.
+  my_libraryInit(dylib);
+
+  Foo f = new Foo(12);
+
+  print(f.x); // 1;
+  f.x = 24;
+  print(f.x); // 24
+
+  f.printY(); // The value of y is: 12
+
+  Foo.printInt(36); // The integer is: 36
+
+  return 0;
+}</code>
+      </pre>
+    </div>
+
+    <div class="flex flex-col text-white px-12 py-6">
+      <p class="font-slab text-3xl">And more!</p>
+    </div>
+  </div>
+
+  <div class="flex flex-col px-12 py-6">
+    <p class="font-slab text-5xl">Frontends</p>
+    <div class="flex -m-4">
+      <div class="border border-gray-600 m-4 p-4 pt-3 rounded">
+        <a href="https://github.com/finch-gen/finch-cc" class="font-fira font-semibold underline text-3xl">finch-cc</a>
+        <p class="font-fira text-lg">finch frontend for C++</p>
+      </div>
+
+      <div class="border border-gray-600 m-4 p-4 pt-3 rounded">
+        <a href="https://github.com/finch-gen/finch-dart" class="font-fira font-semibold underline text-3xl">finch-dart</a>
+        <p class="font-fira text-lg">finch frontend for Dart</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="flex flex-col px-12 py-6 bg-rust font-mono">
+    <p class="font-slab text-5xl">Get Started with C++</p>
+    <p>First, add the following to your Cargo.toml</p>
+<pre><code class="language-toml">[lib]
+# if we do not include "lib" here rust will remove the functions we rely on
+crate-type = ["lib", "cdylib"]
+
+[dependencies]
+finch-macro = "0.1.0"
+
+[build-dependencies]
+finch-cc = "0.1.0"
+</code></pre>
+
+    <br>
+    <p>And then create a build.rs file</p>
+<pre><code class="language-rust">fn main() {
+  finch_cc::generate().expect("Failed to generate C++ bindings");
+}</code></pre>
+
+    <br>
+    <p>At the top of your lib.rs file, add the following</p>
+    <pre><code class="language-rust">use finch_macro::*;</code></pre>
+
+    <br>
+    <p>On every struct and impl you want to expose add the following attribute</p>
+    <pre><code class="language-rust">#[finch_bindgen]</code></pre>
+
+    <br>
+    <p>Now you can build your library</p>
+    <pre><code class="plaintext">&gt; cargo build</code></pre>
+
+    <br>
+    <p>Now you can use the generated header files and shared library in your C++ code!</p>
+  </div>

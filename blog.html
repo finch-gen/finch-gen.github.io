@@ -1,0 +1,15 @@
+---
+layout: default
+title: finch-gen blog
+---
+
+{% include header.html section="blog" %}
+
+<div class="px-12 py-6 flex flex-col flex-grow">
+  {% for post in site.posts %}
+    <div>
+      <a href="{{ post.url }}" class="font-slab text-4xl">{{ post.title }}</a>
+      {{ post.excerpt }}
+    </div>
+  {% endfor %}
+</div>
