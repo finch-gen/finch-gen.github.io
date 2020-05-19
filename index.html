@@ -20,8 +20,8 @@ highlight_style: "dark"
         <p class="font-slab text-5xl -my-4 text-rust">Rust</p>
       </div>
     </div>
-    <pre class="flex-grow flex border-t border-gray-700">
-<code class="language-rust h-full w-full">use finch_macro::*;
+{% highlight rust %}
+use finch_macro::*;
 
 #[finch_bindgen]
 pub struct Foo {
@@ -45,8 +45,8 @@ impl Foo {
   pub fn print_int(value: i32) {
     println!("The integer is: {}", value);
   }
-}</code>
-      </pre>
+}
+{% endhighlight %}
     </div>
 
     <div class="flex flex-col mx-4 my-2">
@@ -57,8 +57,8 @@ impl Foo {
           <p class="font-slab text-5xl -my-4 text-cc">C++</p>
         </div>
       </div>
-      <pre class="flex-grow flex border-t border-gray-700">
-<code class="language-cpp h-full w-full">#include &lt;iostream&gt;
+{% highlight cc %}
+#include <iostream>
 #include "my_library.h"
 
 using namespace my_library;
@@ -70,15 +70,15 @@ void main() {
 
   Foo f(12);
 
-  std::cout &lt;&lt; f.get_x() &lt;&lt; std::endl; // 1
+  std::cout << f.get_x() << std::endl; // 1
   f.set_x(24);
-  std::cout &lt;&lt; f.get_x() &lt;&lt; std::endl; // 24
+  std::cout << f.get_x() << std::endl; // 24
 
   f.print_y(); // The value of y is: 12
 
   Foo::print_int(36); // The integer is: 36
-}</code>
-      </pre>
+}
+{% endhighlight %}
     </div>
 
     <div class="flex flex-col mx-4 my-2">
@@ -89,8 +89,8 @@ void main() {
           <p class="font-slab text-5xl -my-4 text-dart">Dart</p>
         </div>
       </div>
-      <pre class="flex-grow flex border-t border-gray-700">
-<code class="language-dart h-full w-full">import 'dart:ffi';
+{% highlight dart %}
+import 'dart:ffi';
 import 'my_library.dart';
 
 int main() {
@@ -112,8 +112,8 @@ int main() {
   Foo.printInt(36); // The integer is: 36
 
   return 0;
-}</code>
-      </pre>
+}
+{% endhighlight %}
     </div>
 
     <div class="flex flex-col text-white px-12 py-6">
@@ -145,7 +145,8 @@ int main() {
   <div class="flex flex-col px-12 py-6 bg-rust font-mono">
     <p class="font-slab text-5xl">Get Started with C++</p>
     <p>First, add the following to your Cargo.toml</p>
-<pre><code class="language-toml">[lib]
+{% highlight toml %}
+[lib]
 # if we do not include "lib" here rust will remove the functions we rely on
 crate-type = ["lib", "cdylib"]
 
@@ -154,25 +155,38 @@ finch-macro = "0.1.0"
 
 [build-dependencies]
 finch-cc = "0.1.0"
-</code></pre>
+{% endhighlight %}
+
 
     <br>
     <p>And then create a build.rs file</p>
-<pre><code class="language-rust">fn main() {
+{% highlight rust %}
+fn main() {
   finch_cc::generate().expect("Failed to generate C++ bindings");
-}</code></pre>
+}
+{% endhighlight %}
+
 
     <br>
     <p>At the top of your lib.rs file, add the following</p>
-    <pre><code class="language-rust">use finch_macro::*;</code></pre>
+{% highlight rust %}
+use finch_macro::*;
+{% endhighlight %}
+
 
     <br>
     <p>On every struct and impl you want to expose add the following attribute</p>
-    <pre><code class="language-rust">#[finch_bindgen]</code></pre>
+{% highlight rust %}
+#[finch_bindgen]
+{% endhighlight %}
+
 
     <br>
     <p>Now you can build your library</p>
-    <pre><code class="plaintext">&gt; cargo build</code></pre>
+{% highlight plaintext %}
+> cargo build
+{% endhighlight %}
+
 
     <br>
     <p>Now you can use the generated header files and shared library in your C++ code!</p>
