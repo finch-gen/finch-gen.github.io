@@ -12,11 +12,11 @@
       .then((data) => {
         const versions = data[location.pathname.split('/')[2]];
         if (versions.includes('latest')) {
-          location.pathname = `${location.pathname}/latest`;
+          location.replace('latest');
         } else if (versions.includes('master')) {
-          location.pathname = `${location.pathname}/master`;
+          location.replace('master');
         } else {
-          location.pathname = `${location.pathname}/${versions[0]}`;
+          location.replace(versions[0]);
         }
       });
   </script>
