@@ -1,7 +1,7 @@
 const fs = require('fs');
 
 const data = JSON.parse(fs.readFileSync(`${__dirname}/reference/data.json`))
-const crate = process.argv[2];
+const crate = process.env.CRATE_NAME;
 const version = process.env.GITHUB_REF.replace('refs/heads/', '').replace('refs/tags/', '');
 
 if (!Array.isArray(data[crate])) {
