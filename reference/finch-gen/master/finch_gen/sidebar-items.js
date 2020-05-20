@@ -1,1 +1,1 @@
-initSidebarItems({"attr":[["finch_bindgen",""]],"enum":[["FinchOption",""],["FinchResult",""]],"struct":[["FinchString",""]]});
+initSidebarItems({"attr":[["finch_bindgen",""]],"mod":[["builtin",""]]});
