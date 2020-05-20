@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>finch-gen</title>
+</head>
+<body>
+  <script>
+    fetch('/reference/data.json')
+      .then((x) => x.json())
+      .then((data) => {
+        const versions = data[location.pathname.split('/')[2]];
+        if (versions.includes('latest')) {
+          location.pathname = `${location.pathname}/latest`;
+        } else if (versions.includes('master')) {
+          location.pathname = `${location.pathname}/master`;
+        } else {
+          location.pathname = `${location.pathname}/${versions[0]}`;
+        }
+      });
+  </script>
+</body>
+</html>
