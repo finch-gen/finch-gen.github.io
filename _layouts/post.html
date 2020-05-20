@@ -3,6 +3,8 @@ layout: default
 ---
 {% include header.html section="blog" %}
 <div class="px-12 py-6 flex flex-col flex-grow">
-  <p class="font-slab text-4xl">{{ page.title }}</p>
-  {{ content }}
+  <p class="font-slab text-4xl underline">{{ page.title }}</p>
+  <article class="markdown-body mt-2">
+    {{ content }}
+  </article>
 </div>

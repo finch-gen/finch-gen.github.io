@@ -8,8 +8,10 @@ title: finch-gen blog
 <div class="px-12 py-6 flex flex-col flex-grow">
   {% for post in site.posts %}
     <div>
-      <a href="{{ post.url }}" class="font-slab text-4xl">{{ post.title }}</a>
-      {{ post.excerpt }}
+      <a href="{{ post.url }}" class="font-slab text-4xl underline">{{ post.title }}</a>
+      <article class="markdown-body mt-2">
+        {{ post.excerpt }}
+      </article>
     </div>
   {% endfor %}
 </div>
