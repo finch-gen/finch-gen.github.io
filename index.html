@@ -64,10 +64,6 @@ impl Foo {
 using namespace my_library;
 
 void main() {
-  // We need to initialize the library before we can use it.
-  // This sets up the panic hook.
-  initialize();
-
   Foo f(12);
 
   std::cout << f.get_x() << std::endl; // 1
