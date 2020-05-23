@@ -7,33 +7,6 @@
   }
 </style>
 
-<!-- <style>
-  .finch-footer {
-    --text-opacity: 1;
-    color: #fff;
-    color: rgba(255, 255, 255, var(--text-opacity));
-    padding-left: 3rem;
-    padding-right: 3rem;
-    padding-top: 1.5rem;
-    padding-bottom: 1.5rem;
-    --bg-opacity: 1;
-    background-color: #282c34;
-    background-color: rgba(40, 44, 52, var(--bg-opacity));
-  }
-
-  .finch-footer.finch-title {
-    font-size: 3rem;
-    font-family: "Alfa Slab One", sans-serif;
-    margin: 0;
-  }
-
-  .finch-footer.finch-description {
-    font-size: 1.125rem;
-    font-family: "Fira Sans", sans-serif;
-    margin: 0;
-  }
-</style> -->
-
 <style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><div class="bg-rust px-12 py-3 flex justify-between items-center text-black" style="margin: -10px -15px 10px 185px;">
   <a href="/" class="font-slab text-5xl text-black">finch-gen <span class="font-fira">reference</span></a>
 
@@ -702,6 +675,23 @@
 <span id="648">648</span>
 <span id="649">649</span>
 <span id="650">650</span>
+<span id="651">651</span>
+<span id="652">652</span>
+<span id="653">653</span>
+<span id="654">654</span>
+<span id="655">655</span>
+<span id="656">656</span>
+<span id="657">657</span>
+<span id="658">658</span>
+<span id="659">659</span>
+<span id="660">660</span>
+<span id="661">661</span>
+<span id="662">662</span>
+<span id="663">663</span>
+<span id="664">664</span>
+<span id="665">665</span>
+<span id="666">666</span>
+<span id="667">667</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">fs</span>::<span class="ident">File</span>;
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">sync</span>::<span class="ident">Mutex</span>;
@@ -740,6 +730,10 @@
 
 <span class="kw">impl</span> <span class="ident">ToCPPType</span> <span class="kw">for</span> <span class="ident">FinchType</span> {
   <span class="kw">fn</span> <span class="ident">to_cpp_type</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">String</span> {
+    <span class="kw">if</span> <span class="self">self</span>.<span class="ident">display_name</span>.<span class="ident">starts_with</span>(<span class="kw-2">&amp;</span><span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;finch::bindgen::{}::___finch_bindgen___{0}___class___&quot;</span>, <span class="kw">unsafe</span> { <span class="kw-2">&amp;</span><span class="ident">CRATE_NAME</span> })) {
+      <span class="kw">return</span> <span class="self">self</span>.<span class="ident">display_name</span>.<span class="ident">split</span>(<span class="string">&quot;___&quot;</span>).<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">str</span><span class="op">&gt;</span><span class="op">&gt;</span>()[<span class="number">4</span>].<span class="ident">to_string</span>() <span class="op">+</span> <span class="string">&quot;*&quot;</span>;
+    }
+
     <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">canonical_type</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">canonical_type</span>.<span class="ident">as_ref</span>() {
       <span class="kw">return</span> <span class="ident">canonical_type</span>.<span class="ident">to_cpp_type</span>();
     }
@@ -770,6 +764,10 @@
   }
 
   <span class="kw">fn</span> <span class="ident">convert_arg</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">body</span>: <span class="ident">String</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">String</span> {
+    <span class="kw">if</span> <span class="self">self</span>.<span class="ident">display_name</span>.<span class="ident">starts_with</span>(<span class="kw-2">&amp;</span><span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;finch::bindgen::{}::___finch_bindgen___{0}___class___&quot;</span>, <span class="kw">unsafe</span> { <span class="kw-2">&amp;</span><span class="ident">CRATE_NAME</span> })) {
+      <span class="kw">return</span> <span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;{}.self&quot;</span>, <span class="ident">body</span>);
+    }
+
     <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">canonical_type</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">canonical_type</span>.<span class="ident">as_ref</span>() {
       <span class="kw">return</span> <span class="ident">canonical_type</span>.<span class="ident">convert_arg</span>(<span class="ident">body</span>);
     }
@@ -826,6 +824,11 @@
   }
 
   <span class="kw">fn</span> <span class="ident">convert_ret</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">body</span>: <span class="ident">String</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">String</span> {
+    <span class="kw">if</span> <span class="self">self</span>.<span class="ident">display_name</span>.<span class="ident">starts_with</span>(<span class="kw-2">&amp;</span><span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;finch::bindgen::{}::___finch_bindgen___{0}___class___&quot;</span>, <span class="kw">unsafe</span> { <span class="kw-2">&amp;</span><span class="ident">CRATE_NAME</span> })) {
+      <span class="kw">let</span> <span class="ident">class</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">display_name</span>.<span class="ident">split</span>(<span class="string">&quot;___&quot;</span>).<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">str</span><span class="op">&gt;</span><span class="op">&gt;</span>()[<span class="number">4</span>];
+      <span class="kw">return</span> <span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;new {}({})&quot;</span>, <span class="ident">class</span>, <span class="ident">body</span>);
+    }
+
     <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">canonical_type</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">canonical_type</span>.<span class="ident">as_ref</span>() {
       <span class="kw">return</span> <span class="ident">canonical_type</span>.<span class="ident">convert_ret</span>(<span class="ident">body</span>);
     }
@@ -1153,10 +1156,14 @@
 
       {}
 
+      {1}({8} *self) {{
+        this-&gt;self = self;
+      }}
+      {} *self = nullptr;
+
       private:
         {1}(const {1}&amp;) = delete;
         {1} &amp;operator=(const {1}&amp;) = delete;
-        {} *self = nullptr;
       }};&quot;</span>,
       <span class="self">self</span>.<span class="ident">comments</span>.<span class="ident">as_ref</span>().<span class="ident">unwrap_or</span>(<span class="kw-2">&amp;</span><span class="string">&quot;&quot;</span>.<span class="ident">to_string</span>()),
       <span class="self">self</span>.<span class="ident">name</span>,
