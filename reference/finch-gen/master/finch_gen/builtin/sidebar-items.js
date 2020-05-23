@@ -1,1 +1,1 @@
-initSidebarItems({"enum":[["FinchOption",""],["FinchResult",""]],"static":[["PANIC_HOOK",""]],"struct":[["FinchString",""]]});
+initSidebarItems({"enum":[["FinchOption",""],["FinchResult",""]],"static":[["PANIC_HOOK",""]],"struct":[["FinchCString",""],["FinchString",""]]});

@@ -91,6 +91,45 @@
 <span id="37">37</span>
 <span id="38">38</span>
 <span id="39">39</span>
+<span id="40">40</span>
+<span id="41">41</span>
+<span id="42">42</span>
+<span id="43">43</span>
+<span id="44">44</span>
+<span id="45">45</span>
+<span id="46">46</span>
+<span id="47">47</span>
+<span id="48">48</span>
+<span id="49">49</span>
+<span id="50">50</span>
+<span id="51">51</span>
+<span id="52">52</span>
+<span id="53">53</span>
+<span id="54">54</span>
+<span id="55">55</span>
+<span id="56">56</span>
+<span id="57">57</span>
+<span id="58">58</span>
+<span id="59">59</span>
+<span id="60">60</span>
+<span id="61">61</span>
+<span id="62">62</span>
+<span id="63">63</span>
+<span id="64">64</span>
+<span id="65">65</span>
+<span id="66">66</span>
+<span id="67">67</span>
+<span id="68">68</span>
+<span id="69">69</span>
+<span id="70">70</span>
+<span id="71">71</span>
+<span id="72">72</span>
+<span id="73">73</span>
+<span id="74">74</span>
+<span id="75">75</span>
+<span id="76">76</span>
+<span id="77">77</span>
+<span id="78">78</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">sync</span>::<span class="ident">Once</span>;
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">ffi</span>::<span class="ident">CString</span>;
@@ -106,17 +145,56 @@
 
 <span class="attribute">#[<span class="ident">repr</span>(<span class="ident">C</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">FinchString</span> {
+  <span class="kw">pub</span> <span class="ident">ptr</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">c_char</span>,
+  <span class="kw">pub</span> <span class="ident">len</span>: <span class="ident">usize</span>,
+  <span class="kw">pub</span> <span class="ident">string</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">String</span>,
+}
+
+<span class="kw">impl</span> <span class="ident">FinchString</span> {
+  <span class="kw">pub</span> <span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">data</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">u8</span>, <span class="ident">len</span>: <span class="ident">usize</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">let</span> <span class="ident">ptr</span> <span class="op">=</span> ::<span class="ident">std</span>::<span class="ident">alloc</span>::<span class="ident">alloc</span>(::<span class="ident">std</span>::<span class="ident">alloc</span>::<span class="ident">Layout</span>::<span class="ident">from_size_align</span>(<span class="ident">len</span>, <span class="number">1</span>).<span class="ident">expect</span>(<span class="string">&quot;failed to create ::std::alloc::Layout&quot;</span>));
+    ::<span class="ident">std</span>::<span class="ident">ptr</span>::<span class="ident">copy_nonoverlapping</span>(<span class="ident">data</span>, <span class="ident">ptr</span>, <span class="ident">len</span>);
+    <span class="kw">let</span> <span class="ident">string</span> <span class="op">=</span> <span class="ident">String</span>::<span class="ident">from_raw_parts</span>(<span class="ident">ptr</span>, <span class="ident">len</span>, <span class="ident">len</span>);
+    <span class="self">Self</span>::<span class="ident">from</span>(<span class="ident">string</span>)
+  }
+}
+
+<span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">FinchString</span> {
+  <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">string</span>: <span class="ident">String</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">let</span> <span class="ident">string</span> <span class="op">=</span> <span class="ident">Box</span>::<span class="ident">new</span>(<span class="ident">string</span>);
+    <span class="self">Self</span> {
+      <span class="ident">len</span>: <span class="ident">string</span>.<span class="ident">as_bytes</span>().<span class="ident">len</span>(),
+      <span class="ident">ptr</span>: <span class="ident">string</span>.<span class="ident">as_ptr</span>() <span class="kw">as</span> <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">c_char</span>,
+      <span class="ident">string</span>: <span class="ident">Box</span>::<span class="ident">into_raw</span>(<span class="ident">string</span>),
+    }
+  }
+}
+
+<span class="kw">impl</span> <span class="ident">Drop</span> <span class="kw">for</span> <span class="ident">FinchString</span> {
+  <span class="kw">fn</span> <span class="ident">drop</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) {
+    <span class="ident">drop</span>(<span class="kw">unsafe</span> { <span class="ident">Box</span>::<span class="ident">from_raw</span>(<span class="self">self</span>.<span class="ident">string</span>) });
+  }
+}
+
+<span class="attribute">#[<span class="ident">repr</span>(<span class="ident">C</span>)]</span>
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">FinchCString</span> {
   <span class="kw">pub</span> <span class="ident">ptr</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">c_char</span>,
   <span class="kw">pub</span> <span class="ident">len</span>: <span class="ident">usize</span>,
 }
 
-<span class="kw">impl</span> <span class="ident">FinchString</span> {
-  <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">string</span>: <span class="ident">String</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
-    <span class="comment">// TODO: Support non-c-compatible strings</span>
+<span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">FinchCString</span> {
+  <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">string</span>: <span class="ident">String</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">let</span> <span class="ident">string</span> <span class="op">=</span> <span class="ident">CString</span>::<span class="ident">new</span>(<span class="ident">string</span>).<span class="ident">expect</span>(<span class="string">&quot;Failed to create CString&quot;</span>);
     <span class="self">Self</span> {
-      <span class="ident">len</span>: <span class="ident">string</span>.<span class="ident">len</span>(),
-      <span class="ident">ptr</span>: <span class="ident">CString</span>::<span class="ident">new</span>(<span class="ident">string</span>).<span class="ident">expect</span>(<span class="string">&quot;Failed to create CString&quot;</span>).<span class="ident">into_raw</span>(),
+      <span class="ident">len</span>: <span class="ident">string</span>.<span class="ident">as_bytes</span>().<span class="ident">len</span>(),
+      <span class="ident">ptr</span>: <span class="ident">string</span>.<span class="ident">into_raw</span>(),
     }
+  }
+}
+
+<span class="kw">impl</span> <span class="ident">Drop</span> <span class="kw">for</span> <span class="ident">FinchCString</span> {
+  <span class="kw">fn</span> <span class="ident">drop</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) {
+    <span class="ident">drop</span>(<span class="kw">unsafe</span> { <span class="ident">CString</span>::<span class="ident">from_raw</span>(<span class="self">self</span>.<span class="ident">ptr</span>) });
   }
 }
 
@@ -127,10 +205,11 @@
 }
 
 <span class="attribute">#[<span class="ident">repr</span>(<span class="ident">C</span>)]</span>
-<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">FinchResult</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">E</span><span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">FinchResult</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
   <span class="prelude-val">Ok</span>(<span class="ident">T</span>),
-  <span class="prelude-val">Err</span>(<span class="ident">E</span>),
-}</pre></div>
+  <span class="prelude-val">Err</span>(<span class="ident">FinchString</span>),
+}
+</pre></div>
 </section><section id="search" class="content hidden"></section><section class="footer"></section><div class="bg-rust px-12 py-6 bg-atomDark text-white" style="margin: 20px -15px -20px 185px;">
   <div>
     <p class="font-slab text-5xl m-0">finch-gen</p>
