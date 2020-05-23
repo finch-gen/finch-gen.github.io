@@ -1,1 +1,1 @@
-initSidebarItems({"fn":[["generate",""]]});
+initSidebarItems({"struct":[["Builder",""],["Config",""]]});
