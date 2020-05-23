@@ -1,0 +1,1 @@
+initSidebarItems({"enum":[["TypeKind","Indicates the categorization of a type."]],"fn":[["get_package_name",""],["to_camel_case",""],["to_pascal_case",""]],"struct":[["Builder",""],["Config",""],["FinchClass",""],["FinchDrop",""],["FinchError",""],["FinchGetter",""],["FinchMethod",""],["FinchNew",""],["FinchOutput",""],["FinchSetter",""],["FinchStatic",""],["FinchType",""]]});

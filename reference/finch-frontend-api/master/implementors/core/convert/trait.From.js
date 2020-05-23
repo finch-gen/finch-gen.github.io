@@ -1,0 +1,3 @@
+(function() {var implementors = {};
+implementors["finch_frontend_api"] = [{"text":"impl&lt;'tu, '_&gt; <a class=\"trait\" href=\"https://doc.rust-lang.org/nightly/core/convert/trait.From.html\" title=\"trait core::convert::From\">From</a>&lt;&amp;'_ Type&lt;'tu&gt;&gt; for <a class=\"struct\" href=\"finch_frontend_api/struct.FinchType.html\" title=\"struct finch_frontend_api::FinchType\">FinchType</a>","synthetic":false,"types":["finch_frontend_api::FinchType"]}];
+if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()
